@@ -8,12 +8,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        Network.shared.request2(type: Beer.self, api: .beers) { B in
+            print(B)
+        }
+        // Network.shared.request(api: .beers) { Beer in
+        //print(Beer)
+        //}
+  
     }
-
-
+    
 }
-
