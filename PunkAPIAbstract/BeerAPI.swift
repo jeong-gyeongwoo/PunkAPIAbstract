@@ -1,5 +1,5 @@
 //
-//  PunkAPI.swift
+//  Network.swift
 //  PunkAPIAbstract
 //
 //  Created by 정경우 on 2023/09/19.
@@ -8,39 +8,34 @@
 import Foundation
 import Alamofire
 
-enum GetBeer {
+
+class BeerAPI {
     
-    case beers
-    case single(id: String)
-    case random
+    static let shared = BeerAPI()
     
-    private var baseURL: String {
-        return "https://api.punkapi.com/v2/beers"
-    }
+    private init() {}
     
-    var endpoint: URL {
-        switch self {
-        case .beers:
-            return URL(string: baseURL)!
-        case .single(let id):
-            return URL(string: baseURL + "/\(id)")!
-        case .random:
-            return URL(string: baseURL + "/random")!
-            
+    //    func request(api: GetBeer, completion: @escaping(Beer) -> ()) {
+    //        AF.request(api.endpoint, method: api.method).validate(statusCode: 200...500).responseDecodable(of: Beer.self) { response in
+    //            switch response.result {
+    //            case .success(let value):
+    //                completion(value)
+    //            case .failure(let error):
+    //                print(error)
+    //            }
+    //        }
+    //
+    //    }
+    
+    func request2<T:Decodable>(type: T.Type, api: GetBeer, completion: @escaping(T) -> ()) {
+        AF.request(api).validate(statusCode: 200...500).responseDecodable(of: T.self) { response in
+            switch response.result {
+            case .success(let value):
+                completion(value)
+            case .failure(let error):
+                print(error)
+            }
         }
-    }
-    var method: HTTPMethod {
-        return .get
     }
     
 }
-
-/*
- get beers
- https://api.punkapi.com/v2/beers
- get a single beer
- https://api.punkapi.com/v2/beers/1
- get random beer
- https://api.punkapi.com/v2/beers/random
- PunkAPI, 네트워크 구조 추상화
- */
